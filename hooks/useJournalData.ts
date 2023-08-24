@@ -4,21 +4,26 @@ import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
 import Day from "../declarations/Day";
 import Entry from "../declarations/Entry";
-
-const JOURNAL_DATA_DIRECTORY = FileSystem.documentDirectory + "journalData/";
-const JOURNAL_METADATA_DIRECTORY = FileSystem.documentDirectory + "metadata/";
-const METADATA_FILE_PATH = JOURNAL_METADATA_DIRECTORY + "metadata.json";
-const PASSWORD = "somepassword";
+import {
+  JOURNAL_DATA_DIRECTORY,
+  JOURNAL_METADATA_DIRECTORY,
+  METADATA_FILE_PATH,
+} from "../utils/constants";
+import { useKeyContext } from "./KeyContext";
 
 const useJournalData = () => {
   const [data, setData] = useState<Day[]>([]);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [key, _] = useKeyContext();
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(JOURNAL_DATA_DIRECTORY);
-
       try {
+        if (key === null) {
+          console.error("key is NULL");
+          return;
+        }
+
         await FileSystem.makeDirectoryAsync(JOURNAL_DATA_DIRECTORY, {
           intermediates: true,
         });
@@ -31,22 +36,18 @@ const useJournalData = () => {
 
         const loadedData: Day[] = [];
         for (const file of files) {
-          console.log(file);
-
           const dayData = await FileSystem.readAsStringAsync(
             JOURNAL_DATA_DIRECTORY + file
           );
+
           loadedData.push(
             deserializeDay(
               JSON.parse(
-                CryptoES.AES.decrypt(dayData, PASSWORD).toString(
-                  CryptoES.enc.Utf8
-                )
+                CryptoES.AES.decrypt(dayData, key).toString(CryptoES.enc.Utf8)
               )
             )
           );
         }
-        console.log(loadedData);
 
         setData(loadedData);
         const exists = await FileSystem.getInfoAsync(METADATA_FILE_PATH).then(
@@ -78,17 +79,21 @@ const useJournalData = () => {
   };
 
   const saveData = async (newData: Day[]) => {
-    console.log("saving data");
-
     try {
+      if (key === null) {
+        console.error("key is null");
+        return;
+      }
       for (const index in newData) {
         const day = newData[index];
         if (!deepEqual(day, data[index]) && data[index] !== undefined) continue;
+
         await FileSystem.writeAsStringAsync(
-          JOURNAL_DATA_DIRECTORY + day.date.toISOString() + ".json",
-          CryptoES.AES.encrypt(JSON.stringify(day), PASSWORD).toString()
+          JOURNAL_DATA_DIRECTORY +
+            day.date.toISOString().replace(/:|-/g, "") +
+            ".json",
+          CryptoES.AES.encrypt(JSON.stringify(day), key).toString()
         );
-        console.log("saved data ", day.date.toDateString());
       }
 
       const metadata = {
