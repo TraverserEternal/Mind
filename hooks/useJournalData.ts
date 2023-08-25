@@ -10,6 +10,7 @@ import {
   METADATA_FILE_PATH,
 } from "../utils/constants";
 import { useKeyContext } from "./KeyContext";
+import useDebounce from "./useDebounce";
 
 const useJournalData = () => {
   const [data, setData] = useState<Day[]>([]);
@@ -49,7 +50,11 @@ const useJournalData = () => {
           );
         }
 
-        setData(loadedData);
+        setData(
+          loadedData.sort(
+            (a, b) => a.date.getMilliseconds() - b.date.getMilliseconds()
+          )
+        );
         const exists = await FileSystem.getInfoAsync(METADATA_FILE_PATH).then(
           (data) => data.exists
         );
@@ -114,7 +119,7 @@ const useJournalData = () => {
   return {
     data,
     lastUpdated,
-    saveData,
+    saveData: useDebounce(saveData, 1000),
   };
 };
 

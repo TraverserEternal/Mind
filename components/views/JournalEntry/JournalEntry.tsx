@@ -1,19 +1,22 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Entry from "../../../declarations/Entry";
+import { theme } from "../../../utils/themes";
 
 interface JournalEntryProps {
   entry: Entry;
+  onChange: (text: string) => void;
 }
 
-const JournalEntry: React.FC<JournalEntryProps> = ({ entry }) => {
+const JournalEntry: React.FC<JournalEntryProps> = ({ entry, onChange }) => {
   return (
     <View style={styles.container}>
       <TextInput
         placeholder="Write Here"
-        placeholderTextColor="#DAD2DB"
+        placeholderTextColor={theme.secondaryTextColor}
         multiline
         style={styles.textInput}
+        onChangeText={onChange}
       >
         {entry.text}
       </TextInput>
@@ -29,18 +32,19 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   textInput: {
+    color: theme.textColor,
     borderBottomWidth: 1,
     marginTop: 20,
     padding: 4,
     marginRight: 20,
     marginLeft: 20,
-    borderColor: "#DAD2DB",
+    borderColor: theme.secondaryTextColor,
   },
   timestamp: {
     position: "absolute",
     top: 10,
     right: 20,
-    color: "#DAD2DB",
+    color: theme.secondaryTextColor,
   },
 });
 

@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
+import { theme } from "../../../utils/themes";
 
 interface CircularButtonProps {
   onPress: () => void;
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25, // Half of the width and height to make it circular
-    backgroundColor: "#8a3792", // Replace with your desired button color
+    backgroundColor: theme.buttonBackgroundColor, // Replace with your desired button color
     justifyContent: "center",
     alignItems: "center",
   },

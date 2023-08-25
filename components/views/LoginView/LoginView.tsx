@@ -39,7 +39,7 @@ const LoginView: React.FC = () => {
         <Icon
           name={passwordVisible ? "eye" : "eye-slash"}
           size={20}
-          color="#888"
+          color={theme.secondaryTextColor}
         />
       </TouchableOpacity>
     );
@@ -59,6 +59,7 @@ const LoginView: React.FC = () => {
       <Text style={styles.title}>Enter Password</Text>
       <View style={styles.inputContainer}>
         <TextInput
+          placeholderTextColor={theme.secondaryTextColor}
           style={styles.input}
           placeholder="Password"
           secureTextEntry={!passwordVisible}
@@ -93,11 +94,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    backgroundColor: theme.backgroundColor,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: theme.textColor,
   },
   inputContainer: {
     flexDirection: "row",
@@ -105,6 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   input: {
+    color: theme.textColor,
     flex: 1,
     borderBottomWidth: 1,
     borderColor: theme.secondaryTextColor,

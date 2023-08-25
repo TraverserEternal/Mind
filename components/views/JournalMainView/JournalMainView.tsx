@@ -37,33 +37,64 @@ const JournalMainView: React.FC = () => {
     saveData(newData);
   };
 
+  function journalEntryChanged(
+    text: string,
+    dayIndex: number,
+    entryIndex: number
+  ): void {
+    const newData = [...data];
+    newData[dayIndex].entries[entryIndex].text = text;
+    saveData(newData);
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar hidden />
-      {data.map((day) => (
-        <View key={day.date.toISOString()}>
-          <Text style={styles.dateText}>{day.date.toDateString()}</Text>
-          {day.entries.map((entry) => (
-            <JournalEntry key={entry.timestamp.toISOString()} entry={entry} />
-          ))}
-        </View>
-      ))}
       <Text style={styles.lastUpdatedText}>
         Last Updated:{" "}
         {lastUpdated
           ? `${lastUpdated.toDateString()} at ${lastUpdated.toLocaleTimeString()}`
           : "Never"}
       </Text>
-      <View style={styles.addButtonContainer}>
-        <CircularButton onPress={handleAddEntry}>
-          <Icon name="feather" size={20} color="white" />
-        </CircularButton>
+      <View style={styles.scrollable}>
+        {data
+          .slice()
+          .reverse()
+          .map((day, dayIndex) => (
+            <View key={day.date.toISOString()}>
+              <Text style={styles.dateText}>{day.date.toDateString()}</Text>
+              {day.entries.map((entry, entryIndex) => (
+                <JournalEntry
+                  onChange={(text) =>
+                    journalEntryChanged(
+                      text,
+                      data.length - dayIndex - 1,
+                      entryIndex
+                    )
+                  }
+                  key={entry.timestamp.toISOString()}
+                  entry={entry}
+                />
+              ))}
+            </View>
+          ))}
       </View>
+      <CircularButton
+        style={styles.addButtonContainer}
+        onPress={handleAddEntry}
+      >
+        <Icon name="feather" size={20} color={theme.buttonTextColor} />
+      </CircularButton>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollable: {
+    flexDirection: "column-reverse",
+    height: "80%",
+    overflow: "scroll",
+  },
   container: {
     position: "absolute",
     backgroundColor: theme.backgroundColor,
@@ -83,6 +114,7 @@ const styles = StyleSheet.create({
     color: theme.secondaryTextColor,
     textAlign: "center",
     marginTop: 20,
+    marginBottom: 20,
   },
   addButtonContainer: {
     position: "absolute",
