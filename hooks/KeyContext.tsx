@@ -1,14 +1,17 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react";
 
 // Create a context for the key
-const KeyContext = createContext<
-  [string | null, (newKey: string) => void] | null
->(null);
+const KeyContext = createContext<[string, (newKey: string) => void] | null>(
+  null
+);
 
 // Custom hook to use the key context
 const useKeyContext = () => {
   const context = useContext(KeyContext);
-  if (!context) {
+  if (context === null) {
+    throw new Error("useKeyContext must be used within a KeyContextProvider");
+  }
+  if (context[0] === null) {
     throw new Error("useKeyContext must be used within a KeyContextProvider");
   }
   return context;

@@ -8,6 +8,7 @@ import LoginView from "./components/views/LoginView/LoginView";
 import PasswordCreateView from "./components/views/PasswordCreate/PasswordCreateView";
 import SplashView from "./components/views/SplashView/SplashView";
 import { KeyContextProvider } from "./hooks/KeyContext";
+import { JournalContextProvider } from "./hooks/useJournalData";
 import { theme } from "./utils/themes";
 
 export type RootStackParamList = {
@@ -24,30 +25,32 @@ const App: React.FC = () => {
   StatusBar.setBarStyle(theme.isDark ? "dark-content" : "light-content", true);
   return (
     <KeyContextProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="SplashView">
-          <Stack.Screen
-            name="JournalMainView"
-            component={JournalMainView}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PasswordCreateView"
-            component={PasswordCreateView}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="LoginView"
-            component={LoginView}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="SplashView"
-            component={SplashView}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <JournalContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="SplashView">
+            <Stack.Screen
+              name="JournalMainView"
+              component={JournalMainView}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PasswordCreateView"
+              component={PasswordCreateView}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LoginView"
+              component={LoginView}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SplashView"
+              component={SplashView}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </JournalContextProvider>
     </KeyContextProvider>
   );
 };

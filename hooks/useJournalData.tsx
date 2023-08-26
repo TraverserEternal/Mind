@@ -1,7 +1,13 @@
 import CryptoES from "crypto-es";
 import deepEqual from "deep-equal";
 import * as FileSystem from "expo-file-system";
-import { useEffect, useState } from "react";
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Day from "../declarations/Day";
 import Entry from "../declarations/Entry";
 import {
@@ -20,11 +26,10 @@ const useJournalData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          console.error("key is NULL");
+        if (key === "") {
+          console.log("key is empty");
           return;
         }
-
         await FileSystem.makeDirectoryAsync(JOURNAL_DATA_DIRECTORY, {
           intermediates: true,
         });
@@ -52,7 +57,7 @@ const useJournalData = () => {
 
         setData(
           loadedData.sort(
-            (a, b) => a.date.getMilliseconds() - b.date.getMilliseconds()
+            (a, b) => b.date.getMilliseconds() - a.date.getMilliseconds()
           )
         );
         const exists = await FileSystem.getInfoAsync(METADATA_FILE_PATH).then(
@@ -71,7 +76,7 @@ const useJournalData = () => {
     };
 
     fetchData();
-  }, []);
+  }, [key]);
 
   const deserializeDay = (day: any): Day => {
     const entries: Entry[] = [];
@@ -85,8 +90,8 @@ const useJournalData = () => {
 
   const saveData = async (newData: Day[]) => {
     try {
-      if (key === null) {
-        console.error("key is null");
+      if (key === "") {
+        console.error("key is empty");
         return;
       }
       for (const index in newData) {
@@ -123,4 +128,33 @@ const useJournalData = () => {
   };
 };
 
-export default useJournalData;
+const JournalContext = createContext<{
+  data: Day[];
+  saveData: (newData: Day[]) => void;
+  lastUpdated: Date | null;
+} | null>(null);
+
+// Custom hook to use the key context
+export const useJournalContext = () => {
+  const context = useContext(JournalContext);
+  if (context === null)
+    throw new Error(
+      "useJournalContext must be used within a JournalContextProvider"
+    );
+  if (context.data === null)
+    throw new Error(
+      "useJournalContext must be used within a JournalContextProvider"
+    );
+  return context;
+};
+
+// Context provider component
+export const JournalContextProvider: React.FC<PropsWithChildren> = ({
+  children,
+}) => {
+  const value = useJournalData();
+
+  return (
+    <JournalContext.Provider value={value}>{children}</JournalContext.Provider>
+  );
+};

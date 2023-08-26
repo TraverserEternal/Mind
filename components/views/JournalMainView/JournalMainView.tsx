@@ -1,14 +1,15 @@
 import React from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/Entypo";
 import Entry from "../../../declarations/Entry";
-import useJournalData from "../../../hooks/useJournalData";
+import { useJournalContext } from "../../../hooks/useJournalData";
 import { theme } from "../../../utils/themes";
 import CircularButton from "../../common/CircularButton/CircularButton";
-import JournalEntry from "../JournalEntry/JournalEntry";
+import JournalEntriesScrollView from "../../common/StickyFootersSectionList/StickyFootersSectionList";
+import LastUpdatedText from "./components/LastUpdatedText";
 
 const JournalMainView: React.FC = () => {
-  const { data, lastUpdated, saveData } = useJournalData();
+  const { data, saveData } = useJournalContext();
   const handleAddEntry = () => {
     // Create a new entry
     const newEntry: Entry = {
@@ -47,38 +48,20 @@ const JournalMainView: React.FC = () => {
     saveData(newData);
   }
 
+  function getDayIndices(): number[] {
+    let currentIndex = 0;
+    return data.map((day) => {
+      const dayIndex = currentIndex;
+      currentIndex += day.entries.length;
+      return dayIndex;
+    });
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar hidden />
-      <Text style={styles.lastUpdatedText}>
-        Last Updated:{" "}
-        {lastUpdated
-          ? `${lastUpdated.toDateString()} at ${lastUpdated.toLocaleTimeString()}`
-          : "Never"}
-      </Text>
-      <View style={styles.scrollable}>
-        {data
-          .slice()
-          .reverse()
-          .map((day, dayIndex) => (
-            <View key={day.date.toISOString()}>
-              <Text style={styles.dateText}>{day.date.toDateString()}</Text>
-              {day.entries.map((entry, entryIndex) => (
-                <JournalEntry
-                  onChange={(text) =>
-                    journalEntryChanged(
-                      text,
-                      data.length - dayIndex - 1,
-                      entryIndex
-                    )
-                  }
-                  key={entry.timestamp.toISOString()}
-                  entry={entry}
-                />
-              ))}
-            </View>
-          ))}
-      </View>
+      <LastUpdatedText style={styles.lastUpdatedText} />
+      <JournalEntriesScrollView />
       <CircularButton
         style={styles.addButtonContainer}
         onPress={handleAddEntry}
@@ -90,11 +73,6 @@ const JournalMainView: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollable: {
-    flexDirection: "column-reverse",
-    height: "80%",
-    overflow: "scroll",
-  },
   container: {
     position: "absolute",
     backgroundColor: theme.backgroundColor,
@@ -103,18 +81,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
-  dateText: {
-    color: theme.textColor,
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 18,
-    marginTop: 30,
-  },
   lastUpdatedText: {
     color: theme.secondaryTextColor,
     textAlign: "center",
-    marginTop: 20,
-    marginBottom: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   addButtonContainer: {
     position: "absolute",
