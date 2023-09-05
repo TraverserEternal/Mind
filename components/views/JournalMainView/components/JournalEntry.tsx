@@ -34,12 +34,12 @@ const JournalEntry: React.FC<JournalEntryProps> = ({
       >
         {entry.text}
       </TextInput>
-      {currentTimeStamp &&
-        currentTimeStamp.toTimeString() !== entry.timestamp.toTimeString() && (
-          <Text style={styles.timestamp}>
-            {entry.timestamp.toLocaleTimeString()}
-          </Text>
-        )}
+      {/* {currentTimeStamp &&
+        currentTimeStamp.toTimeString() !== entry.timestamp.toTimeString() && ( */}
+      <Text style={styles.timestamp}>
+        {entry.timestamp.toLocaleTimeString()}
+      </Text>
+      {/* )} */}
     </View>
   );
 };

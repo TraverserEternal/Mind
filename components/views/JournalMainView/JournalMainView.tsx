@@ -5,7 +5,7 @@ import Entry from "../../../declarations/Entry";
 import { useJournalContext } from "../../../hooks/useJournalData";
 import { theme } from "../../../utils/themes";
 import CircularButton from "../../common/CircularButton/CircularButton";
-import JournalEntriesScrollView from "../../common/StickyFootersSectionList/StickyFootersSectionList";
+import JournalEntriesScrollView from "../../common/JournalEntriesScrollView/JournalEntriesScrollView";
 import LastUpdatedText from "./components/LastUpdatedText";
 
 const JournalMainView: React.FC = () => {
