@@ -22,12 +22,14 @@ const useJournalData = () => {
   const [data, setData] = useState<Day[]>([]);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [key, _] = useKeyContext();
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (key === "") {
           console.log("key is empty");
+          setDataIsLoaded(false);
           return;
         }
         await FileSystem.makeDirectoryAsync(JOURNAL_DATA_DIRECTORY, {
@@ -60,6 +62,7 @@ const useJournalData = () => {
             (a, b) => b.date.getMilliseconds() - a.date.getMilliseconds()
           )
         );
+        setDataIsLoaded(true);
         const exists = await FileSystem.getInfoAsync(METADATA_FILE_PATH).then(
           (data) => data.exists
         );
@@ -94,6 +97,8 @@ const useJournalData = () => {
         console.error("key is empty");
         return;
       }
+
+      setData(newData);
       for (const index in newData) {
         const day = newData[index];
         if (!deepEqual(day, data[index]) && data[index] !== undefined) continue;
@@ -114,7 +119,6 @@ const useJournalData = () => {
         JSON.stringify(metadata)
       );
 
-      setData(newData);
       setLastUpdated(metadata.lastUpdated);
     } catch (error) {
       console.error("Error saving journal data:", error);
@@ -123,6 +127,7 @@ const useJournalData = () => {
 
   return {
     data,
+    dataIsLoaded,
     lastUpdated,
     saveData: useDebounce(saveData, 1000),
   };
@@ -130,6 +135,7 @@ const useJournalData = () => {
 
 const JournalContext = createContext<{
   data: Day[];
+  dataIsLoaded: boolean;
   saveData: (newData: Day[]) => void;
   lastUpdated: Date | null;
 } | null>(null);

@@ -66,7 +66,7 @@ const PasswordCreateView: React.FC = () => {
     if (setKey === null) return;
     setKey(password1);
     setSubmitting(false);
-    navigation.navigate("JournalMainView");
+    navigation.navigate("DataGatherView");
   };
 
   return (

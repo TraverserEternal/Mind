@@ -18,20 +18,17 @@ const LastUpdatedText: FC<TextProps> = ({ style, ...props }) => {
     ]).start();
   }, [fadeAnim]);
   useEffect(() => {
-    const timeoutID = updateTextRegularly(true);
+    let intervalId: NodeJS.Timeout;
+    setText("Saved!");
+    const timeoutID = setTimeout(() => {
+      setText(getLastUpdatedTextData());
+      intervalId = setInterval(() => setText(getLastUpdatedTextData()), 30000);
+    });
     return () => {
       if (timeoutID !== null) clearTimeout(timeoutID);
+      if (intervalId !== null) clearInterval(intervalId);
     };
   }, [lastUpdated]);
-  const updateTextRegularly = (
-    shouldSaySaved: boolean = false
-  ): NodeJS.Timeout => {
-    setText(shouldSaySaved ? "Saved!" : getLastUpdatedTextData());
-    return setTimeout(
-      () => updateTextRegularly(),
-      shouldSaySaved ? 2000 : 30000
-    );
-  };
   const getLastUpdatedTextData = (): string => {
     if (!lastUpdated) return "Last Saved: Never";
     if (new Date().toDateString() === lastUpdated.toDateString()) {

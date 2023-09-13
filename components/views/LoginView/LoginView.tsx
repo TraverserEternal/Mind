@@ -26,7 +26,7 @@ const LoginView: React.FC = () => {
 
   const navigateIfKeyCorrect = async () => {
     if (key !== null && (await checkPassword(key))) {
-      navigation.navigate("JournalMainView");
+      navigation.navigate("DataGatherView");
     }
   };
   const togglePasswordVisibility = () => {

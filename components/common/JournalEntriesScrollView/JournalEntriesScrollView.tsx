@@ -23,15 +23,11 @@ const JournalEntriesScrollView: FC = () => {
   let scrollView = useRef<ScrollView | null>(null);
   let hasScrolledToBottom = useRef(false);
   useEffect(() => {
-    if (!hasScrolledToBottom.current) {
-      const timeout = setTimeout(() => {
-        scrollView.current?.scrollToEnd();
-        hasScrolledToBottom.current = true;
-        console.log(hasScrolledToBottom.current);
-      }, 1000);
-      return () => clearTimeout(timeout);
+    if (!hasScrolledToBottom.current && scrollView.current) {
+      scrollView.current.scrollToEnd();
+      hasScrolledToBottom.current = true;
     }
-  }, [data]);
+  }, [scrollView.current, hasScrolledToBottom.current]);
 
   function changeJournalEntry(
     text: string,
