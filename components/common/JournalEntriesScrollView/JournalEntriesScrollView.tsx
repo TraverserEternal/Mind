@@ -43,7 +43,7 @@ const JournalEntriesScrollView: FC = () => {
     let currentIndex = 0;
     return data.map((day) => {
       const dayIndex = currentIndex;
-      currentIndex += day.entries.length;
+      currentIndex += day.entries.length + 1;
       return dayIndex;
     });
   };
