@@ -25,6 +25,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const App: React.FC = () => {
   NavigationBar.setBackgroundColorAsync(theme.backgroundColor);
   StatusBar.setBarStyle(theme.isDark ? "dark-content" : "light-content", true);
+  StatusBar.setTranslucent(true);
   return (
     <KeyContextProvider>
       <JournalContextProvider>
