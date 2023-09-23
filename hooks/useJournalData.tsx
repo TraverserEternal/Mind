@@ -57,11 +57,7 @@ const useJournalData = () => {
           );
         }
 
-        setData(
-          loadedData.sort(
-            (a, b) => b.date.getMilliseconds() - a.date.getMilliseconds()
-          )
-        );
+        setData(loadedData.sort((a, b) => (b.date < a.date ? 1 : -1)));
         setDataIsLoaded(true);
         const exists = await FileSystem.getInfoAsync(METADATA_FILE_PATH).then(
           (data) => data.exists
