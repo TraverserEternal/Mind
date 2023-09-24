@@ -3,12 +3,13 @@ import { StatusBar, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/Entypo";
 import Entry from "../../../declarations/Entry";
 import { useJournalContext } from "../../../hooks/useJournalData";
-import { theme } from "../../../utils/themes";
+import { Theme, useThemes } from "../../../utils/useThemes";
 import CircularButton from "../../common/CircularButton/CircularButton";
 import JournalEntriesScrollView from "../../common/JournalEntriesScrollView/JournalEntriesScrollView";
 import LastUpdatedText from "./components/LastUpdatedText";
 
 const JournalMainView: React.FC = () => {
+  const { theme } = useThemes();
   const { data, saveData } = useJournalContext();
   const handleAddEntry = () => {
     // Create a new entry
@@ -56,6 +57,7 @@ const JournalMainView: React.FC = () => {
       return dayIndex;
     });
   }
+  const styles = createStyles(theme);
 
   return (
     <View style={styles.container}>
@@ -72,26 +74,27 @@ const JournalMainView: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    backgroundColor: theme.backgroundColor,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    left: 0,
-  },
-  lastUpdatedText: {
-    color: theme.secondaryTextColor,
-    textAlign: "center",
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  addButtonContainer: {
-    position: "absolute",
-    bottom: 30,
-    right: 30,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      position: "absolute",
+      backgroundColor: theme.backgroundColor,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      left: 0,
+    },
+    lastUpdatedText: {
+      color: theme.secondaryTextColor,
+      textAlign: "center",
+      paddingTop: 20,
+      paddingBottom: 20,
+    },
+    addButtonContainer: {
+      position: "absolute",
+      bottom: 30,
+      right: 30,
+    },
+  });
 
 export default JournalMainView;

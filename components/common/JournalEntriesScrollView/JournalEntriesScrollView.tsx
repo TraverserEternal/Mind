@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Day from "../../../declarations/Day";
 import Entry from "../../../declarations/Entry";
 import { useJournalContext } from "../../../hooks/useJournalData";
-import { theme } from "../../../utils/themes";
+import { Theme, useThemes } from "../../../utils/useThemes";
 import JournalEntry from "../../views/JournalMainView/components/JournalEntry";
 
 type FormattedData =
@@ -19,6 +19,7 @@ type FormattedData =
     };
 
 const JournalEntriesScrollView: FC = () => {
+  const { theme } = useThemes();
   const { data, saveData } = useJournalContext();
   let scrollView = useRef<ScrollView | null>(null);
   let hasScrolledToBottom = useRef(false);
@@ -47,6 +48,8 @@ const JournalEntriesScrollView: FC = () => {
       return dayIndex;
     });
   };
+
+  const styles = createStyles(theme);
 
   const renderJournalEntries = (): ReactNode[] => {
     const formattedData = data.reduce<FormattedData[]>(
@@ -93,45 +96,46 @@ const JournalEntriesScrollView: FC = () => {
 
 export default JournalEntriesScrollView;
 
-const styles = StyleSheet.create({
-  stickyTimeStamp: {
-    position: "absolute",
-    right: 0,
-    color: theme.textColor,
-    padding: 10,
-  },
-  dateText: {
-    backgroundColor: theme.backgroundColor,
-    color: theme.textColor,
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 18,
-    paddingTop: 30,
-  },
-  container: {
-    flex: 1,
-    marginBottom: 100,
-    borderColor: theme.secondaryTextColor,
-    borderBottomWidth: 1,
-    marginLeft: 30,
-    marginRight: 30,
-  },
-  item: {
-    backgroundColor: "#f9c2ff",
-    padding: 20,
-    marginVertical: 8,
-  },
-  header: {
-    fontSize: 24,
-    backgroundColor: "#fff",
-    alignSelf: "center",
-  },
-  title: {
-    fontSize: 24,
-  },
-  stickyDate: {
-    color: theme.textColor,
-    padding: 10,
-    textAlign: "center",
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    stickyTimeStamp: {
+      position: "absolute",
+      right: 0,
+      color: theme.textColor,
+      padding: 10,
+    },
+    dateText: {
+      backgroundColor: theme.backgroundColor,
+      color: theme.textColor,
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 18,
+      paddingTop: 30,
+    },
+    container: {
+      flex: 1,
+      marginBottom: 100,
+      borderColor: theme.secondaryTextColor,
+      borderBottomWidth: 1,
+      marginLeft: 30,
+      marginRight: 30,
+    },
+    item: {
+      backgroundColor: "#f9c2ff",
+      padding: 20,
+      marginVertical: 8,
+    },
+    header: {
+      fontSize: 24,
+      backgroundColor: "#fff",
+      alignSelf: "center",
+    },
+    title: {
+      fontSize: 24,
+    },
+    stickyDate: {
+      color: theme.textColor,
+      padding: 10,
+      textAlign: "center",
+    },
+  });

@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from "react-native";
 import Entry from "../../../../declarations/Entry";
-import { theme } from "../../../../utils/themes";
+import { Theme, useThemes } from "../../../../utils/useThemes";
 
 interface JournalEntryProps {
   entry: Entry;
@@ -23,6 +23,8 @@ const JournalEntry: React.FC<JournalEntryProps> = ({
   style,
   currentTimeStamp,
 }) => {
+  const { theme } = useThemes();
+  const styles = createStyles(theme);
   return (
     <View style={[styles.container, style]}>
       <TextInput
@@ -44,23 +46,24 @@ const JournalEntry: React.FC<JournalEntryProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    position: "relative",
-  },
-  textInput: {
-    color: theme.textColor,
-    borderBottomWidth: 1,
-    marginTop: 20,
-    padding: 4,
-    borderColor: theme.secondaryTextColor,
-  },
-  timestamp: {
-    position: "absolute",
-    top: 10,
-    right: 0,
-    color: theme.secondaryTextColor,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      position: "relative",
+    },
+    textInput: {
+      color: theme.textColor,
+      borderBottomWidth: 1,
+      marginTop: 20,
+      padding: 4,
+      borderColor: theme.secondaryTextColor,
+    },
+    timestamp: {
+      position: "absolute",
+      top: 10,
+      right: 0,
+      color: theme.secondaryTextColor,
+    },
+  });
 
 export default JournalEntry;

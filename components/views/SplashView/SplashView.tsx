@@ -4,9 +4,10 @@ import { View } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { useKeyContext } from "../../../hooks/KeyContext";
 import { checkPassword, passwordExists } from "../../../utils/encryptionUtils";
-import { theme } from "../../../utils/themes";
+import { useThemes } from "../../../utils/useThemes";
 
 const SplashView: FC = () => {
+  const { theme } = useThemes();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [key, _] = useKeyContext();
   useEffect(() => {

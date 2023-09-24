@@ -1,4 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import * as NavigationBar from "expo-navigation-bar";
 import React, { useState } from "react";
 import {
   GestureResponderEvent,
@@ -13,10 +14,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { RootStackParamList } from "../../../App";
 import { useKeyContext } from "../../../hooks/KeyContext";
 import * as enc from "../../../utils/encryptionUtils";
-import { theme } from "../../../utils/themes";
+import { Theme, useThemes } from "../../../utils/useThemes";
 import Button from "../../common/Button/Button";
 
 const PasswordCreateView: React.FC = () => {
+  const { theme } = useThemes();
   const [_, setKey] = useKeyContext();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [submitting, setSubmitting] = useState(false);
@@ -69,6 +71,11 @@ const PasswordCreateView: React.FC = () => {
     navigation.navigate("DataGatherView");
   };
 
+  const styles = createStyles(theme);
+
+  NavigationBar.setBackgroundColorAsync(theme.backgroundColor);
+  StatusBar.setBarStyle(theme.isDark ? "dark-content" : "light-content", true);
+
   return (
     <View style={styles.container}>
       <StatusBar hidden={false} />
@@ -106,40 +113,41 @@ const PasswordCreateView: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.backgroundColor,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  title: {
-    color: theme.textColor,
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  input: {
-    color: theme.textColor,
-    flex: 1,
-    borderBottomWidth: 1,
-    borderColor: theme.secondaryTextColor,
-    marginRight: 10,
-  },
-  submitButton: {
-    marginTop: 20,
-  },
-  submitButtonText: {
-    color: theme.buttonTextColor,
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: theme.backgroundColor,
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+    },
+    title: {
+      color: theme.textColor,
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 20,
+    },
+    inputContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 15,
+    },
+    input: {
+      color: theme.textColor,
+      flex: 1,
+      borderBottomWidth: 1,
+      borderColor: theme.secondaryTextColor,
+      marginRight: 10,
+    },
+    submitButton: {
+      marginTop: 20,
+    },
+    submitButtonText: {
+      color: theme.buttonTextColor,
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+  });
 
 export default PasswordCreateView;

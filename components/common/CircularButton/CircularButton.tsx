@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
-import { theme } from "../../../utils/themes";
+import { Theme, useThemes } from "../../../utils/useThemes";
 
 interface CircularButtonProps {
   onPress: () => void;
@@ -12,6 +12,8 @@ const CircularButton: React.FC<PropsWithChildren<CircularButtonProps>> = ({
   style,
   children,
 }) => {
+  const { theme } = useThemes();
+  const styles = createStyles(theme);
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
       {children}
@@ -19,15 +21,16 @@ const CircularButton: React.FC<PropsWithChildren<CircularButtonProps>> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    width: 50,
-    height: 50,
-    borderRadius: 25, // Half of the width and height to make it circular
-    backgroundColor: theme.buttonBackgroundColor, // Replace with your desired button color
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    button: {
+      width: 50,
+      height: 50,
+      borderRadius: 25, // Half of the width and height to make it circular
+      backgroundColor: theme.buttonBackgroundColor, // Replace with your desired button color
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
 
 export default CircularButton;

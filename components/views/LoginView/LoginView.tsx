@@ -11,10 +11,14 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { RootStackParamList } from "../../../App";
 import { useKeyContext } from "../../../hooks/KeyContext";
 import { checkPassword, resetAccount } from "../../../utils/encryptionUtils";
-import { theme } from "../../../utils/themes";
+import { Theme, useThemes } from "../../../utils/useThemes";
 import Button from "../../common/Button/Button";
 
+import * as NavigationBar from "expo-navigation-bar";
+import { StatusBar } from "react-native";
+
 const LoginView: React.FC = () => {
+  const { theme } = useThemes();
   const [key, setKey] = useKeyContext();
   useEffect(() => {
     navigateIfKeyCorrect();
@@ -54,6 +58,11 @@ const LoginView: React.FC = () => {
     setKey(password);
   };
 
+  const styles = createStyles(theme);
+
+  NavigationBar.setBackgroundColorAsync(theme.backgroundColor);
+  StatusBar.setBarStyle(theme.isDark ? "dark-content" : "light-content", true);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Enter Password</Text>
@@ -88,40 +97,41 @@ const LoginView: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: theme.backgroundColor,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: theme.textColor,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  input: {
-    color: theme.textColor,
-    flex: 1,
-    borderBottomWidth: 1,
-    borderColor: theme.secondaryTextColor,
-    marginRight: 10,
-  },
-  submitButton: {
-    marginTop: 30,
-  },
-  submitButtonText: {
-    color: theme.buttonTextColor,
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+      backgroundColor: theme.backgroundColor,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 20,
+      color: theme.textColor,
+    },
+    inputContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 15,
+    },
+    input: {
+      color: theme.textColor,
+      flex: 1,
+      borderBottomWidth: 1,
+      borderColor: theme.secondaryTextColor,
+      marginRight: 10,
+    },
+    submitButton: {
+      marginTop: 30,
+    },
+    submitButtonText: {
+      color: theme.buttonTextColor,
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+  });
 
 export default LoginView;

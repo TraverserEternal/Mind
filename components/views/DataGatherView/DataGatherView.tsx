@@ -3,9 +3,10 @@ import { FC, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { useJournalContext } from "../../../hooks/useJournalData";
-import { theme } from "../../../utils/themes";
+import { useThemes } from "../../../utils/useThemes";
 
 const DataGatherView: FC = () => {
+  const { theme } = useThemes();
   const { dataIsLoaded } = useJournalContext();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   useEffect(() => {

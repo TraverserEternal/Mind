@@ -1,24 +1,30 @@
 import { FC, PropsWithChildren } from "react";
 import {
-  StyleProp,
+  StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
-  ViewStyle,
 } from "react-native";
-import { theme } from "../../../utils/themes";
+import { Theme, useThemes } from "../../../utils/useThemes";
 
 const Button: FC<PropsWithChildren<TouchableOpacityProps>> = ({
   style,
   ...rest
 }) => {
-  return <TouchableOpacity {...rest} style={[styles, style]} />;
+  const { theme } = useThemes();
+  const styles = createStyles(theme);
+  return (
+    <TouchableOpacity {...rest} style={[styles.touchableOpacity, style]} />
+  );
 };
 
-const styles: StyleProp<ViewStyle> = {
-  backgroundColor: theme.buttonBackgroundColor,
-  paddingVertical: 10,
-  paddingHorizontal: 20,
-  borderRadius: 5,
-};
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    touchableOpacity: {
+      backgroundColor: theme.buttonBackgroundColor,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 5,
+    },
+  });
 
 export default Button;
