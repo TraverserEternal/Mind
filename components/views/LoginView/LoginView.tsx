@@ -81,18 +81,16 @@ const LoginView: React.FC = () => {
         style={styles.submitButton}
         onPress={handleLogin}
         disabled={submitting}
-      >
-        <Text style={styles.submitButtonText}>Login</Text>
-      </Button>
+        label="Login"
+      ></Button>
       <Button
         style={styles.submitButton}
         onPress={async () => {
           await resetAccount();
           navigation.navigate("SplashView");
         }}
-      >
-        <Text>Reset Account</Text>
-      </Button>
+        label="Reset Account"
+      ></Button>
     </View>
   );
 };

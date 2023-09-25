@@ -1,4 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { getItemAsync } from "expo-secure-store";
 import { FC, useEffect } from "react";
 import { View } from "react-native";
 import { RootStackParamList } from "../../../App";
@@ -15,10 +16,12 @@ const SplashView: FC = () => {
   }, []);
   const sendToCorrectScreen = async () => {
     const passwordDoesExist = await passwordExists();
-    if (!passwordDoesExist) navigation.navigate("PasswordCreateView");
-    else if (key === "" || key === null) navigation.navigate("LoginView");
-    else if (!(await checkPassword(key))) navigation.navigate("LoginView");
-    else navigation.navigate("JournalMainView");
+    if (!passwordDoesExist) {
+      const hasSeenIntro = (await getItemAsync("seenIntro")) != null;
+      navigation.navigate(hasSeenIntro ? "PasswordCreateView" : "IntroView");
+    } else if (key === "" || key === null || !(await checkPassword(key))) {
+      navigation.navigate("LoginView");
+    } else navigation.navigate("JournalMainView");
   };
   return (
     <View

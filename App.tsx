@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { StatusBar } from "react-native";
 import DataGatherView from "./components/views/DataGatherView/DataGatherView";
+import IntroView from "./components/views/IntroView/IntroView";
 import JournalMainView from "./components/views/JournalMainView/JournalMainView";
 import LoginView from "./components/views/LoginView/LoginView";
 import PasswordCreateView from "./components/views/PasswordCreate/PasswordCreateView";
@@ -17,6 +18,7 @@ export type RootStackParamList = {
   LoginView: undefined;
   SplashView: undefined;
   DataGatherView: undefined;
+  IntroView: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -29,6 +31,11 @@ const App: React.FC = () => {
         <JournalContextProvider>
           <NavigationContainer>
             <Stack.Navigator initialRouteName="SplashView">
+              <Stack.Screen
+                name="IntroView"
+                component={IntroView}
+                options={{ headerShown: false }}
+              />
               <Stack.Screen
                 name="JournalMainView"
                 component={JournalMainView}

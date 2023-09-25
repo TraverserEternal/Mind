@@ -106,9 +106,8 @@ const PasswordCreateView: React.FC = () => {
         style={styles.submitButton}
         onPress={submitPassword}
         disabled={submitIsDisabled()}
-      >
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </Button>
+        label="Submit"
+      ></Button>
     </View>
   );
 };
@@ -142,11 +141,6 @@ const createStyles = (theme: Theme) =>
     },
     submitButton: {
       marginTop: 20,
-    },
-    submitButtonText: {
-      color: theme.buttonTextColor,
-      fontWeight: "bold",
-      fontSize: 16,
     },
   });
 
