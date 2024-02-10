@@ -1,4 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { setItemAsync } from "expo-secure-store";
 import { FC } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import PagerView from "react-native-pager-view";
@@ -11,7 +12,10 @@ const IntroView: FC = () => {
   const styles = createStyles(theme);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const goToPasswordCreate = () => navigation.navigate("PasswordCreateView");
+  const goToPasswordCreate = () => {
+    setItemAsync("seenIntro", "t");
+    navigation.navigate("PasswordCreateView");
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>

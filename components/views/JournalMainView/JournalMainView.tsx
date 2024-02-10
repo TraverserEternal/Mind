@@ -1,3 +1,4 @@
+import * as Clipboard from "expo-clipboard";
 import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/Entypo";
@@ -39,25 +40,29 @@ const JournalMainView: React.FC = () => {
     saveData(newData);
   };
 
-  function journalEntryChanged(
-    text: string,
-    dayIndex: number,
-    entryIndex: number
-  ): void {
-    const newData = [...data];
-    newData[dayIndex].entries[entryIndex].text = text;
-    saveData(newData);
-  }
+  // function journalEntryChanged(
+  //   text: string,
+  //   dayIndex: number,
+  //   entryIndex: number
+  // ): void {
+  //   const newData = [...data];
+  //   newData[dayIndex].entries[entryIndex].text = text;
+  //   saveData(newData);
+  // }
 
-  function getDayIndices(): number[] {
-    let currentIndex = 0;
-    return data.map((day) => {
-      const dayIndex = currentIndex;
-      currentIndex += day.entries.length;
-      return dayIndex;
-    });
-  }
+  // function getDayIndices(): number[] {
+  //   let currentIndex = 0;
+  //   return data.map((day) => {
+  //     const dayIndex = currentIndex;
+  //     currentIndex += day.entries.length;
+  //     return dayIndex;
+  //   });
+  // }
   const styles = createStyles(theme);
+
+  const exportJournal = (): void => {
+    Clipboard.setStringAsync(JSON.stringify(data));
+  };
 
   return (
     <View style={styles.container}>
@@ -69,6 +74,12 @@ const JournalMainView: React.FC = () => {
         onPress={handleAddEntry}
       >
         <Icon name="feather" size={20} color={theme.buttonTextColor} />
+      </CircularButton>
+      <CircularButton
+        style={styles.exportButtonContainer}
+        onPress={exportJournal}
+      >
+        <Icon name="book" size={20} color={theme.buttonTextColor} />
       </CircularButton>
     </View>
   );
@@ -94,6 +105,11 @@ const createStyles = (theme: Theme) =>
       position: "absolute",
       bottom: 30,
       right: 30,
+    },
+    exportButtonContainer: {
+      position: "absolute",
+      bottom: 30,
+      right: 100,
     },
   });
 
